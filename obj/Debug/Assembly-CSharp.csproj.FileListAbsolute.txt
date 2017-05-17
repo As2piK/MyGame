@@ -27,3 +27,6 @@ E:\As2piK\Documents\MyGame\Temp\bin\Debug\UnityEngine.VR.xml
 E:\As2piK\Documents\MyGame\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 E:\As2piK\Documents\MyGame\obj\Debug\Assembly-CSharp.dll
 E:\As2piK\Documents\MyGame\obj\Debug\Assembly-CSharp.pdb
+E:\As2piK\Documents\Git\MyGame\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
+E:\As2piK\Documents\Git\MyGame\obj\Debug\Assembly-CSharp.dll
+E:\As2piK\Documents\Git\MyGame\obj\Debug\Assembly-CSharp.pdb

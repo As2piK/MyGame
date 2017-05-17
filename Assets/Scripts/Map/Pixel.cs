@@ -78,7 +78,6 @@ public class Pixel : MonoBehaviour, INode {
 
     private void OnMouseEnter()
     {
-        Debug.Log("IN");
         currentColor = rend.material.color;
         if (canBuild)
         {
@@ -92,6 +91,11 @@ public class Pixel : MonoBehaviour, INode {
     private void OnMouseExit()
     {
         rend.material.color = currentColor;
+    }
+
+    public override String ToString()
+    {
+        return "Pixel [" + x + ":" + y + "]";
     }
 
     #region A* Interface

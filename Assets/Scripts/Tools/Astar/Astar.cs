@@ -39,6 +39,9 @@ internal class DuplicateComparer : IComparer<int>
 /// </summary>
 public class AStar
 {
+
+    private static AStar instance;
+    
     /// <summary>
     /// The open list.
     /// </summary>
@@ -79,17 +82,35 @@ public class AStar
     /// </summary>
     public INode CurrentNode { get { return current; } }
 
+    public static AStar getInstance(INode start, INode goal)
+    {
+        if (instance == null)
+        {
+            instance = new AStar();
+        }
+        instance.Reset(start, goal);
+        return instance;
+    }
+
+    public static AStar getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new AStar();
+        }
+        return instance;
+    }
+
     /// <summary>
     /// Creates a new AStar algorithm instance with the provided start and goal nodes.
     /// </summary>
     /// <param name="start">The starting node for the AStar algorithm.</param>
     /// <param name="goal">The goal node for the AStar algorithm.</param>
-    public AStar(INode start, INode goal)
+    private AStar()
     {
         var duplicateComparer = new DuplicateComparer();
         openList = new SortedList<int, INode>(duplicateComparer);
         closedList = new SortedList<int, INode>(duplicateComparer);
-        Reset(start, goal);
     }
 
     /// <summary>
@@ -100,20 +121,32 @@ public class AStar
     public void Reset(INode start, INode g)
     {
         Steps = 0;
-        foreach (Pixel p in openList.Values)
+
+        //TEMP
+
+        for (int i = 0; i < BuildManager.instance.map.mapSizeX; i++)
         {
-            p.SetOpenList(false);
+            for (int j = 0; j < BuildManager.instance.map.mapSizeY; j++)
+            {
+                //BuildManager.instance.map.map[i, j].Parent = null;
+            }
+        }
+
+        foreach (INode n in openList.Values)
+        {
+            n.SetOpenList(false);
         }
         openList.Clear();
-        foreach (Pixel p in closedList.Values)
+        foreach (INode n in closedList.Values)
         {
-            p.SetClosedList(false);
+            n.SetClosedList(false);
         }
+        
         closedList.Clear();
         current = start;
         goal = g;
-        openList.Add(current);
         current.SetOpenList(true);
+        openList.Add(current);
     }
 
     /// <summary>
@@ -143,6 +176,7 @@ public class AStar
             // There are no more nodes to search, return failure.
             if (openList.IsEmpty())
             {
+                Debug.LogError("Path not found");
                 return State.Failed;
             }
 

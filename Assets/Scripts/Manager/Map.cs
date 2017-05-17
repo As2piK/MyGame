@@ -65,12 +65,12 @@ public class Map : MonoBehaviour
     public bool generatePath()
     {
 
-        resetLists();
-        
-        //Run A*
-        astar = new AStar(map[spawnX, spawnY], map[endX, endY]);
+        //resetLists();
 
-        CountOpenClosed();
+        //Run A*
+        astar = AStar.getInstance(map[spawnX, spawnY], map[endX, endY]);
+
+        //CountOpenClosed();
 
         if (astar.Run() == State.Failed)
         {

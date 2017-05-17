@@ -19,6 +19,7 @@ public class Walker : MonoBehaviour {
     private void Start()
     {
         buildManager = BuildManager.instance;
+        path = buildManager.map.getPath();
     }
 
     private void Update()
@@ -33,7 +34,7 @@ public class Walker : MonoBehaviour {
             if (Vector3.Distance(transform.position, target.transform.position) <= target.positionOffset.magnitude + (speed * Time.deltaTime))
             {
                 transform.position = transform.position;
-                if (target == buildManager.map.getEndPixel())
+                if (path.Count == 0)
                 {
                     EndPath();
                     return;
@@ -48,9 +49,10 @@ public class Walker : MonoBehaviour {
         }
     }
 
-    public void updatePath(List<INode> path)
+    public void updatePath(List<INode> p)
     {
-        this.path = path;
+        
+        this.path = p;
         if (target == null)
         {
             target = BuildManager.instance.map.getSpawnPixel();
@@ -58,24 +60,25 @@ public class Walker : MonoBehaviour {
 
         if (path.Contains(target))
         {
+            Debug.Log("yay");
             //New path but target still exists, just remove the points before the current target
             path.RemoveRange(0, path.IndexOf(target));
         }
-        else
-        {
-            //New path hasn't the current target --> Recalculate a specific path for this walker
-            
-            AStar astar = new AStar(target, BuildManager.instance.map.getEndPixel());
-            astar.Run();
-            if (astar.Run() == State.Failed)
-            {
-                //If failed : no existing path --> Destroy
-                WalkerManager.instance.WalkerDie(this);
-                Debug.Log("No path found");
-                return;
-            }
-            this.path = astar.GetPath();
-        }
+        
+        //New path hasn't the current target --> Recalculate a specific path for this walker
+        AStar astar = AStar.getInstance(target, BuildManager.instance.map.getEndPixel());
+        Debug.Log("Nouveau chemin depuis " + target.x + ":" + target.y);
+        path = astar.GetPath();
+
+        //Debug.Log(" ");
+        //Debug.Log(" ");
+        //Debug.Log(BuildManager.instance.map.getEndPixel());
+        //Debug.Log(" ");
+        //Debug.Log(" ");
+        //foreach (INode n in path)
+        //{
+        //    Debug.Log((Pixel)n);
+        //}
 
         GetNextWaypoint();
     }
